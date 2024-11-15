@@ -10,7 +10,7 @@
 
 using namespace std;
 
-// Load dictionary into a map of word lengths
+// dictionary turned into map
 void loadDictionary(const string& filename, unordered_map<int, unordered_set<string>>& dictionary) {
     ifstream file(filename);
     if (!file.is_open()) {
@@ -26,7 +26,7 @@ void loadDictionary(const string& filename, unordered_map<int, unordered_set<str
     file.close();
 }
 
-// Generate all possible neighbors for a word
+// word neighbor generator
 vector<string> getNeighbors(const string& word, const unordered_set<string>& dict) {
     vector<string> neighbors;
     string temp = word;
@@ -40,13 +40,13 @@ vector<string> getNeighbors(const string& word, const unordered_set<string>& dic
                 neighbors.push_back(temp);
             }
         }
-        temp[i] = originalChar; // Restore original character
+        temp[i] = originalChar; // original character
     }
 
     return neighbors;
 }
 
-// BFS to find the shortest word ladder
+// BFS -> shortest word ladder
 bool findWordLadder(const string& start, const string& end, 
                     const unordered_map<int, unordered_set<string>>& dictionary, vector<string>& ladder) {
     if (start.size() != end.size() || dictionary.find(start.size()) == dictionary.end()) {
@@ -58,7 +58,7 @@ bool findWordLadder(const string& start, const string& end,
         return false;
     }
 
-    unordered_map<string, string> parent; // To reconstruct the path
+    unordered_map<string, string> parent; // reconstruct path
     queue<string> q;
     q.push(start);
     parent[start] = "";
@@ -68,7 +68,7 @@ bool findWordLadder(const string& start, const string& end,
         q.pop();
 
         if (current == end) {
-            // Reconstruct the path
+            // reconstruct path
             string word = end;
             while (!word.empty()) {
                 ladder.push_back(word);
@@ -79,14 +79,14 @@ bool findWordLadder(const string& start, const string& end,
         }
 
         for (const string& neighbor : getNeighbors(current, dict)) {
-            if (parent.find(neighbor) == parent.end()) { // Not visited
+            if (parent.find(neighbor) == parent.end()) { // not visited
                 parent[neighbor] = current;
                 q.push(neighbor);
             }
         }
     }
 
-    return false; // No path found
+    return false; // no path found / no ladder
 }
 
 int main() {
@@ -102,7 +102,7 @@ int main() {
         cout << "Enter end word: ";
         cin >> end;
 
-        // Convert to lowercase
+        // convert to lowercase
         transform(start.begin(), start.end(), start.begin(), ::tolower);
         transform(end.begin(), end.end(), end.begin(), ::tolower);
 
